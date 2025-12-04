@@ -153,10 +153,10 @@ def test(opt, model, test_dates, IMAGE_SIZE, PATCH_SIZE):
                                 'count': final_im.shape[0],
                                 'dtype': np.int16
                             }
-                            save_dir = '/data/images'
+                            save_dir = "/content/drive/MyDrive/Colab Notebooks/Image fusion/data/images"
                             if not os.path.exists(save_dir):
                                 os.makedirs(save_dir)
-                            im_name = os.path.join(save_dir, 'swin_LGC.tif')
+                            im_name = os.path.join(save_dir, '20240717_Bottoms_UAV.tif')
                             assert final_im.ndim == 2 or final_im.ndim == 3
                             with rasterio.open(im_name, mode='w', **metadata) as dst:
                                 if final_im.ndim == 3:
@@ -172,10 +172,10 @@ def test(opt, model, test_dates, IMAGE_SIZE, PATCH_SIZE):
         'count': final_im.shape[0],
         'dtype': np.int16
     }
-    save_dir = '/data/images'
+    save_dir = '/content/drive/MyDrive/Colab Notebooks/Image fusion/data/images'
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
-    im_name = os.path.join(save_dir, 'swinfuse_LGC.tif')
+    im_name = os.path.join(save_dir, '20240717_Bottoms_UAV_fuse.tif')
     assert final_im.ndim == 2 or final_im.ndim == 3
     with rasterio.open(im_name, mode='w', **metadata) as dst:
         if final_im.ndim == 3:
