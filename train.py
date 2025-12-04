@@ -49,7 +49,7 @@ def test(opt, model, test_dates, IMAGE_SIZE, PATCH_SIZE):
     final_ssim = 0.0
     for cur_date in test_dates:
         cur_day = int(cur_date.split('_')[1])
-        if cur_day == 347:
+        if cur_day == 228:
             for ref_date in test_dates:
                 ref_day = int(ref_date.split('_')[1])
                 if ref_day != cur_day:
@@ -124,7 +124,9 @@ def test(opt, model, test_dates, IMAGE_SIZE, PATCH_SIZE):
                         cur_result['uiqi'] = []
                         cur_result['ergas'] = 0
 
-                        for i in range(6):
+                        n_bands = real_im.shape[0]
+                        
+                        for i in range(n_bands):
                             cur_result['rmse'].append(rmse(real_im[i], real_predict[i]))
                             cur_result['ssim'].append(ssim(real_im[i], real_predict[i], MAX=1.0)[0])
                             cur_result['uiqi'].append(uiqi(real_im[i], real_predict[i]))
@@ -135,7 +137,7 @@ def test(opt, model, test_dates, IMAGE_SIZE, PATCH_SIZE):
 
                             cur_result['ergas'] += rmse(real_im[i], real_predict[i]) ** 2 / (np.mean(real_im[i]) ** 2 + 1e-100)
 
-                        cur_result['ergas'] = np.sqrt(cur_result['ergas'] / 6.) * 6
+                        cur_result['ergas'] = np.sqrt(cur_result['ergas'] / n_bands) * n_bands
                         cur_result['psnr'] = psnr(real_im, real_predict, MAX=1.0)
 
                         cur_im = real_im * 10000.
@@ -147,7 +149,7 @@ def test(opt, model, test_dates, IMAGE_SIZE, PATCH_SIZE):
                             np.mean(np.array(cur_result['ssim'])), np.mean(np.array(cur_result['uiqi'])),
                             np.mean(np.array(cur_result['cc'])), cur_result['ergas'], cur_result['sam'],
                             cur_result['psnr']))
-                        if ref_day == 331:
+                        if ref_day == 199:
                             final_ssim = np.mean(np.array(cur_result['ssim']))
 
     return final_ssim
@@ -172,7 +174,7 @@ def train(opt, train_dates, test_dates, IMAGE_SIZE, PATCH_SIZE):
 
     best_ssim = 0.0
     best_epoch = -1
-    save_dir = '/mnt/datadisk0/cgy/Datasets/SwinSTFM/models/experiment_best'
+    save_dir = '../data/models/experiment_best'
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
 
@@ -234,11 +236,11 @@ def main():
     torch.backends.cudnn.deterministic = True
 
     parser = argparse.ArgumentParser(description='Train Super Resolution Models')
-    parser.add_argument('--image_size', default=[2720, 3200], type=int, help='the image size (height, width)')
+    parser.add_argument('--image_size', default=[2710, 2637], type=int, help='the image size (height, width)')
     parser.add_argument('--patch_size', default=256, type=int, help='training images crop size')
     parser.add_argument('--num_epochs', default=60, type=int, help='train epoch number')
-    parser.add_argument('--root_dir', default='/mnt/datadisk0/cgy/Datasets/LGC', help='Datasets root directory')
-    parser.add_argument('--train_dir', default='/mnt/datadisk0/cgy/Datasets/LGC_Train', help='Datasets train directory')
+    parser.add_argument('--root_dir', default='../data/final_datasets_for_swinstfm', help='Datasets root directory')
+    parser.add_argument('--train_dir', default='../data/final_datasets_for_swinstfm_Train', help='Datasets train directory')
 
     opt = parser.parse_args()
     IMAGE_SIZE = opt.image_size
@@ -249,7 +251,7 @@ def main():
     test_dates = []
     for dir_name in os.listdir(opt.root_dir):
         cur_day = int(dir_name.split('_')[1])
-        if cur_day not in [331, 347, 363]:
+        if cur_day not in [199, 228]:
             train_dates.append(dir_name)
         else:
             test_dates.append(dir_name)

@@ -16,7 +16,7 @@ class FineUp(nn.Module):
         self.outc = nn.Sequential(
             nn.Conv2d(in_dim, in_dim * 4, 3, 1, 1),
             nn.PixelShuffle(2),
-            nn.Conv2d(in_dim, 6, 3, 1, 1),
+            nn.Conv2d(in_dim, 5, 3, 1, 1),
             nn.Tanh()
         )
 

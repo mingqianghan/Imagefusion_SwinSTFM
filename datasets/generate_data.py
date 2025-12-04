@@ -16,20 +16,16 @@ def main():
     torch.backends.cudnn.deterministic = True
 
     parser = argparse.ArgumentParser(description='Train Super Resolution Models')
-    parser.add_argument('--image_size', default=[2720, 3200], type=int, help='the image size (height, width)')
+    parser.add_argument('--image_size', default=[2710, 2637], type=int, help='the image size (height, width)')
     parser.add_argument('--patch_size', default=256, type=int, help='training images crop size')
-    parser.add_argument('--root_dir', default='/mnt/datadisk0/cgy/Datasets/LGC', help='Datasets root directory')
+    parser.add_argument('--root_dir', default='../data/final_datasets_for_swinstfm', help='Datasets root directory')
 
     opt = parser.parse_args()
     IMAGE_SIZE = opt.image_size
     PATCH_SIZE = opt.patch_size
 
-    train_dates = ['2005_093_Apr03', '2005_045_Feb14',
-                   '2005_029_Jan29', '2004_123_May02',
-                   '2004_299_Oct25', '2005_013_Jan13',
-                   '2004_235_Aug22', '2004_107_Apr16',
-                   '2004_187_Jul05', '2005_061_Mar02',
-                   '2004_219_Aug06']
+    train_dates = ['2024_176_Jun24', '2024_193_Jul11',
+                   '2024_240_Aug27']
 
     # split the whole image into several patches
     PATCH_STRIDE = PATCH_SIZE // 2
@@ -45,17 +41,17 @@ def main():
 
     total_index = 0
     # path where the training images saved in
-    output_dir = '/mnt/datadisk0/cgy/Datasets/LGC_Train'
+    output_dir = '../data/final_datasets_for_swinstfm_Train'
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
     # save all the train images into one numpy array
-    total_original_images = np.zeros((len(train_dates), 2, 6, IMAGE_SIZE[0], IMAGE_SIZE[1]))
+    total_original_images = np.zeros((len(train_dates), 2, 5, IMAGE_SIZE[0], IMAGE_SIZE[1]))
     for k in tqdm(range(len(train_dates))):
         cur_date = train_dates[k]
         target_dir = opt.root_dir + '/' + cur_date
         for filename in os.listdir(target_dir):
-            if filename[:3] != 'MOD':
+            if filename[:3] != 'PS_':
                 path = os.path.join(target_dir, filename)
                 total_original_images[k, 1] = np.load(path)
             else:

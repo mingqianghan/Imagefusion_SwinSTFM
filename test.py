@@ -117,8 +117,10 @@ def test(opt, model, test_dates, IMAGE_SIZE, PATCH_SIZE):
                         cur_result['cc'] = []
                         cur_result['uiqi'] = []
                         cur_result['ergas'] = 0
-
-                        for i in range(6):
+                        
+                        n_bands = real_im.shape[0]
+                        
+                        for i in range(n_bands):
                             cur_result['rmse'].append(rmse(real_im[i], real_predict[i]))
                             cur_result['ssim'].append(ssim(real_im[i], real_predict[i], MAX=1.0)[0])
                             cur_result['uiqi'].append(uiqi(real_im[i], real_predict[i]))
@@ -129,7 +131,7 @@ def test(opt, model, test_dates, IMAGE_SIZE, PATCH_SIZE):
 
                             cur_result['ergas'] += rmse(real_im[i], real_predict[i]) ** 2 / (np.mean(real_im[i]) ** 2 + 1e-100)
 
-                        cur_result['ergas'] = np.sqrt(cur_result['ergas'] / 6.) * 6
+                        cur_result['ergas'] = np.sqrt(cur_result['ergas'] / n_bands) * n_bands
 
                         cur_im = real_im * 10000.
                         cur_predict = real_predict * 10000.

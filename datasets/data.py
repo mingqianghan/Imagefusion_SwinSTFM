@@ -12,14 +12,14 @@ def get_pair_path(root_dir, target_dir_name, ref_dir_name):
     paths = [None, None, None, None]
     target_dir = root_dir + '/' + target_dir_name
     for filename in os.listdir(target_dir):
-        if filename[:3] == 'MOD':
+        if filename[:3] == 'PS_':
             paths[0] = os.path.join(target_dir, filename)
         else:
             paths[1] = os.path.join(target_dir, filename)
 
     target_dir = root_dir + '/' + ref_dir_name
     for filename in os.listdir(target_dir):
-        if filename[:3] == 'MOD':
+        if filename[:3] == 'PS_':
             paths[2] = os.path.join(target_dir, filename)
         else:
             paths[3] = os.path.join(target_dir, filename)
@@ -96,8 +96,11 @@ class PatchSet(Dataset):
         images = []
 
         im = np.load(os.path.join(self.root_dir, str(item) + '.npy'))
+        
+        N_BANDS = 5
+        
         for i in range(4):
-            images.append(im[i * 6: i * 6 + 6, :, :])
+            images.append(im[i * N_BANDS: i * N_BANDS + N_BANDS, :, :])
         patches = [None] * len(images)
         masks = [None] * len(images)
 

@@ -6,7 +6,7 @@ from .swin_transformer import PatchEmbed, PatchMerging, BasicLayer
 class Down(nn.Module):
     def __init__(self, down_scale=2, in_dim=64, depths=(2, 2, 6, 2)):
         super(Down, self).__init__()
-        self.inc = PatchEmbed(img_size=256, patch_size=down_scale, in_chans=6, embed_dim=in_dim,
+        self.inc = PatchEmbed(img_size=256, patch_size=down_scale, in_chans=5, embed_dim=in_dim,
                               norm_layer=nn.LayerNorm)
         self.down1 = DownBlock(in_channels=in_dim, out_channels=in_dim * 2, resolution=256 // down_scale,
                                downsample=PatchMerging, cur_depth=depths[0])
