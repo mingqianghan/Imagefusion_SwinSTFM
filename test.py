@@ -189,7 +189,7 @@ def train(opt, train_dates, test_dates, IMAGE_SIZE, PATCH_SIZE):
 
     model_G = SwinSTFM()
     G_dict = model_G.state_dict()
-    model_CKPT = torch.load('data/models/experiment_best/epoch_best.pth')
+    model_CKPT = torch.load('/content/drive/MyDrive/Colab Notebooks/Image fusion/data/experiment_best/epoch_best.pth')
     pretained_dict = {k: v for k, v in model_CKPT.items() if k in G_dict}
 
     G_dict.update(pretained_dict)
