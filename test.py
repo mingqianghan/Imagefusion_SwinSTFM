@@ -44,7 +44,7 @@ def test(opt, model, test_dates, IMAGE_SIZE, PATCH_SIZE):
     total_image = 0
     for cur_date in test_dates:
         cur_day = int(cur_date.split('_')[1])
-        if cur_day == 347:
+        if cur_day == 228:
             for ref_date in test_dates:
                 if ref_date != cur_date:
                     images = load_image_pair(opt.root_dir, cur_date, ref_date)
@@ -144,7 +144,7 @@ def test(opt, model, test_dates, IMAGE_SIZE, PATCH_SIZE):
                         ))
                         ref_day = int(ref_date.split('_')[1])
                         total_image += cur_predict
-                        if ref_day != 363:
+                        if ref_day != 0:
                             final_im = cur_predict.astype(np.int16)
                             metadata = {
                                 'driver': 'GTiff',
@@ -153,7 +153,7 @@ def test(opt, model, test_dates, IMAGE_SIZE, PATCH_SIZE):
                                 'count': final_im.shape[0],
                                 'dtype': np.int16
                             }
-                            save_dir = '/data/cgy/ParalSTFM/paper_images'
+                            save_dir = '/data/images'
                             if not os.path.exists(save_dir):
                                 os.makedirs(save_dir)
                             im_name = os.path.join(save_dir, 'swin_LGC.tif')
@@ -172,7 +172,7 @@ def test(opt, model, test_dates, IMAGE_SIZE, PATCH_SIZE):
         'count': final_im.shape[0],
         'dtype': np.int16
     }
-    save_dir = '/data/cgy/ParalSTFM/paper_images'
+    save_dir = '/data/images'
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
     im_name = os.path.join(save_dir, 'swinfuse_LGC.tif')
@@ -189,7 +189,7 @@ def train(opt, train_dates, test_dates, IMAGE_SIZE, PATCH_SIZE):
 
     model_G = SwinSTFM()
     G_dict = model_G.state_dict()
-    model_CKPT = torch.load('LGC_best.pth')
+    model_CKPT = torch.load('data/models/experiment_best/epoch_best.pth')
     pretained_dict = {k: v for k, v in model_CKPT.items() if k in G_dict}
 
     G_dict.update(pretained_dict)
@@ -208,9 +208,9 @@ def main():
     torch.backends.cudnn.deterministic = True
 
     parser = argparse.ArgumentParser(description='Train Super Resolution Models')
-    parser.add_argument('--image_size', default=[2720, 3200], type=int, help='the image size (height, width)')
+    parser.add_argument('--image_size', default=[2710, 2637], type=int, help='the image size (height, width)')
     parser.add_argument('--patch_size', default=256, type=int, help='training images crop size')
-    parser.add_argument('--num_epochs', default=60, type=int, help='train epoch number')
+    parser.add_argument('--num_epochs', default=3, type=int, help='train epoch number')
     parser.add_argument('--root_dir', default='/mnt/datadisk0/cgy/Datasets/LGC', help='Datasets root directory')
     parser.add_argument('--train_dir', default='/mnt/datadisk0/cgy/Datasets/LGC_Train', help='Datasets train directory')
 
@@ -224,7 +224,7 @@ def main():
     test_dates = []
     for dir_name in os.listdir(opt.root_dir):
         cur_day = int(dir_name.split('_')[1])
-        if cur_day not in [331, 347, 363]:
+        if cur_day not in [199, 228]:
             train_dates.append(dir_name)
         else:
             test_dates.append(dir_name)
