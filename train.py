@@ -174,7 +174,7 @@ def train(opt, train_dates, test_dates, IMAGE_SIZE, PATCH_SIZE):
 
     best_ssim = 0.0
     best_epoch = -1
-    save_dir = '../data/models/experiment_best'
+    save_dir = 'data/models/experiment_best'
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
 
@@ -238,9 +238,9 @@ def main():
     parser = argparse.ArgumentParser(description='Train Super Resolution Models')
     parser.add_argument('--image_size', default=[2710, 2637], type=int, help='the image size (height, width)')
     parser.add_argument('--patch_size', default=256, type=int, help='training images crop size')
-    parser.add_argument('--num_epochs', default=60, type=int, help='train epoch number')
-    parser.add_argument('--root_dir', default='../data/final_datasets_for_swinstfm', help='Datasets root directory')
-    parser.add_argument('--train_dir', default='../data/final_datasets_for_swinstfm_Train', help='Datasets train directory')
+    parser.add_argument('--num_epochs', default=3, type=int, help='train epoch number')
+    parser.add_argument('--root_dir', default='data/final_datasets_for_swinstfm', help='Datasets root directory')
+    parser.add_argument('--train_dir', default='data/final_datasets_for_swinstfm_Train', help='Datasets train directory')
 
     opt = parser.parse_args()
     IMAGE_SIZE = opt.image_size
