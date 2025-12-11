@@ -24,8 +24,7 @@ def main():
     IMAGE_SIZE = opt.image_size
     PATCH_SIZE = opt.patch_size
 
-    train_dates = ['2024_176_Jun24', '2024_193_Jul11',
-                   '2024_240_Aug27']
+    train_dates = ['2024_193_Jul11', '2024_199_Jul17', '2024_240_Aug27']
 
     # split the whole image into several patches
     PATCH_STRIDE = PATCH_SIZE // 2

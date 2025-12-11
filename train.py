@@ -149,7 +149,7 @@ def test(opt, model, test_dates, IMAGE_SIZE, PATCH_SIZE):
                             np.mean(np.array(cur_result['ssim'])), np.mean(np.array(cur_result['uiqi'])),
                             np.mean(np.array(cur_result['cc'])), cur_result['ergas'], cur_result['sam'],
                             cur_result['psnr']))
-                        if ref_day == 199:
+                        if ref_day == 176:
                             final_ssim = np.mean(np.array(cur_result['ssim']))
 
     return final_ssim
@@ -251,7 +251,7 @@ def main():
     test_dates = []
     for dir_name in os.listdir(opt.root_dir):
         cur_day = int(dir_name.split('_')[1])
-        if cur_day not in [199, 228]:
+        if cur_day not in [176, 228]:
             train_dates.append(dir_name)
         else:
             test_dates.append(dir_name)

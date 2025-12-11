@@ -164,7 +164,7 @@ def test(opt, model, test_dates, IMAGE_SIZE, PATCH_SIZE):
                                         dst.write(final_im[i], i + 1)
                                 else:
                                     dst.write(final_im, 1)
-    final_im = (total_image / 2.).astype(np.int16)
+    final_im = (total_image / 1.).astype(np.int16)
     metadata = {
         'driver': 'GTiff',
         'width': final_im.shape[2],
@@ -211,8 +211,8 @@ def main():
     parser.add_argument('--image_size', default=[2710, 2637], type=int, help='the image size (height, width)')
     parser.add_argument('--patch_size', default=256, type=int, help='training images crop size')
     parser.add_argument('--num_epochs', default=3, type=int, help='train epoch number')
-    parser.add_argument('--root_dir', default='/mnt/datadisk0/cgy/Datasets/LGC', help='Datasets root directory')
-    parser.add_argument('--train_dir', default='/mnt/datadisk0/cgy/Datasets/LGC_Train', help='Datasets train directory')
+    parser.add_argument('--root_dir', default='', help='Datasets root directory')
+    parser.add_argument('--train_dir', default='', help='Datasets train directory')
 
     opt = parser.parse_args()
     IMAGE_SIZE = opt.image_size
@@ -224,7 +224,7 @@ def main():
     test_dates = []
     for dir_name in os.listdir(opt.root_dir):
         cur_day = int(dir_name.split('_')[1])
-        if cur_day not in [199, 228]:
+        if cur_day not in [176, 228]:
             train_dates.append(dir_name)
         else:
             test_dates.append(dir_name)
