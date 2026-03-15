@@ -153,10 +153,11 @@ def test(opt, model, test_dates, IMAGE_SIZE, PATCH_SIZE):
                                 'count': final_im.shape[0],
                                 'dtype': np.int16
                             }
-                            save_dir = "/content/drive/MyDrive/Colab Notebooks/Image fusion/data/images"
+                            save_dir = opt.fused_image_dir
+                            #save_dir = "/content/drive/MyDrive/Colab Notebooks/Image fusion/data/images"
                             if not os.path.exists(save_dir):
                                 os.makedirs(save_dir)
-                            im_name = os.path.join(save_dir, 'UAV_20240815.tif')
+                            im_name = os.path.join(save_dir, opt.fused_image_name) #'UAV_20240815.tif')
                             assert final_im.ndim == 2 or final_im.ndim == 3
                             with rasterio.open(im_name, mode='w', **metadata) as dst:
                                 if final_im.ndim == 3:
@@ -172,10 +173,11 @@ def test(opt, model, test_dates, IMAGE_SIZE, PATCH_SIZE):
         'count': final_im.shape[0],
         'dtype': np.int16
     }
-    save_dir = '/content/drive/MyDrive/Colab Notebooks/Image fusion/data/images'
+    save_dir = opt.fused_image_dir
+    #save_dir = '/content/drive/MyDrive/Colab Notebooks/Image fusion/data/images'
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
-    im_name = os.path.join(save_dir, '20240815_Bottoms_UAV_fuse.tif')
+    im_name = os.path.join(save_dir, 'fuse_new.tif')
     assert final_im.ndim == 2 or final_im.ndim == 3
     with rasterio.open(im_name, mode='w', **metadata) as dst:
         if final_im.ndim == 3:
@@ -189,7 +191,8 @@ def train(opt, train_dates, test_dates, IMAGE_SIZE, PATCH_SIZE):
 
     model_G = SwinSTFM()
     G_dict = model_G.state_dict()
-    model_CKPT = torch.load('/content/drive/MyDrive/Colab Notebooks/Image fusion/data/experiment_best/epoch_best.pth')
+    model_CKPT = torch.load(opt.para_dir)
+    #model_CKPT = torch.load('/content/drive/MyDrive/Colab Notebooks/Image fusion/data/experiment_best/epoch_best.pth')
     pretained_dict = {k: v for k, v in model_CKPT.items() if k in G_dict}
 
     G_dict.update(pretained_dict)
@@ -213,6 +216,10 @@ def main():
     parser.add_argument('--num_epochs', default=3, type=int, help='train epoch number')
     parser.add_argument('--root_dir', default='', help='Datasets root directory')
     parser.add_argument('--train_dir', default='', help='Datasets train directory')
+    parser.add_argument('--para_dir', default='', help='Trained Parameters path')
+    parser.add_argument('--fused_image_dir', default='', help='Fused Image directory')
+    parser.add_argument('--fused_image_name', default='', help='Fused Image name')
+    
 
     opt = parser.parse_args()
     IMAGE_SIZE = opt.image_size
